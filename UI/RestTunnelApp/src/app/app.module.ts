@@ -8,17 +8,33 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { FooterComponent } from './footer/footer.component';
+import { CanActivateAuthGuard } from './Common/CanActivateAuthGuard';
+import { ConsoleComponent } from './console/console.component';
+
 
 const routes: Routes = [
 
   {
     path: '',
-    redirectTo: '/dashboard',
-    pathMatch: 'full'
+    redirectTo: '/console',
+    pathMatch: 'full',
+    canActivate: [CanActivateAuthGuard]
   },
   {
-    path: 'dashboard',
-    component: DashboardComponent
+    path: 'console',
+    component: ConsoleComponent,
+    // canActivate: [CanActivateAuthGuard],
+    children: [
+      {
+        path: '',
+        children: [
+          { path: '', redirectTo: '/console/dashboard', pathMatch: 'full' },
+          { path: 'dashboard', component: DashboardComponent },
+          // { path: 'heroes', component: ManageHeroesComponent },
+          // { path: '', component: AdminDashboardComponent }
+        ],
+      }
+    ]
   },
   {
     path: 'login',
@@ -50,6 +66,7 @@ const components: any[] = [
   NavbarComponent,
   MainMenuComponent,
   FooterComponent,
+  ConsoleComponent,
 ];
 
 @NgModule({
