@@ -8,17 +8,19 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { FooterComponent } from './footer/footer.component';
-import { CanActivateAuthGuard } from './Common/CanActivateAuthGuard';
+import { AppRoutingModule } from './Common/app-routing.module';
 import { ConsoleComponent } from './console/console.component';
-
+import { LoginRoutingModule } from './Common/login-routing.module';
+import { FormsModule }        from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 const routes: Routes = [
-
+  // { path: '', component: Component, canActivate: [AuthGuard] },
   {
     path: '',
     redirectTo: '/console',
     pathMatch: 'full',
-    canActivate: [CanActivateAuthGuard]
+    // canActivate: [CanActivateAuthGuard]
   },
   {
     path: 'console',
@@ -73,7 +75,10 @@ const components: any[] = [
   declarations: components,
   imports: [
     BrowserModule,
-    RouterModule.forRoot(routes)
+    AppRoutingModule,
+    LoginRoutingModule,
+    FormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
