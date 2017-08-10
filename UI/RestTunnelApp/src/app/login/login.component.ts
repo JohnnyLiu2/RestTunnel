@@ -20,13 +20,22 @@ export class LoginComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.http.get('https://localhost:8443/api/accesstoken', {
-          headers: new HttpHeaders({'Custom-Code': 'sfsafsdf'})
-      }).subscribe(data => {
-        // Read the result field from the JSON response.
-        // this.results = data['results'];
-        console.log(data);
-        this.accessCode = data['accessKey']
+    // this.http.get('https://localhost:8443/api/accesstoken', {
+    //       headers: new HttpHeaders({'Custom-Code': 'sfsafsdf'})
+    //   }).subscribe(data => {
+    //     // Read the result field from the JSON response.
+    //     // this.results = data['results'];
+    //     console.log(data);
+    //     this.accessCode = data['accessKey']
+    //   });
+    httpGet('http://mfoglight.azurewebsites.net/api/accesstoken',
+      {headers: {'Custom-Code': 'sfsafsdf', 'Content-Type': FORM_CONTENT_TYPE}}).then(extractJSON).then(o => {
+        // this.login(o);
+        this.accessCode = 'SjmdqbeeqkvLV/SnpzGa8v0e5Us=';//o.data['accessKey'];
+        console.log(this.accessCode);
+
+      }).catch(error => {
+
       });
   }
 
@@ -38,7 +47,7 @@ export class LoginComponent implements OnInit {
 
     let data = 'username=' + encodeURIComponent(this.user) +
       '&pwd=' + encodeURIComponent(this.password);
-    httpPost('http://localhost:8085/api/v1/security/login', FORM_CONTENT_TYPE, data,
+    httpPost('http://mfoglight.azurewebsites.net/api/v1/security/login', FORM_CONTENT_TYPE, data,
     {headers: {'Access-Key': result}}).then(extractJSON).then(o => {
       // this.resume(o.token);
       // this.close();
