@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {httpPost, FORM_CONTENT_TYPE} from '../common/http';
+import { httpPost, FORM_CONTENT_TYPE } from '../common/http';
 import { HttpOptions, httpGet, extractJSON } from '../Common/http';
 import { HttpClient } from "@angular/common/http";
 import { HttpHeaders } from "@angular/common/http";
+import { Router } from '@angular/router';
+import { User, UserService } from '../Common/user.service';
+declare function showCommonModal(): any;
 
 @Component({
   selector: 'app-login',
@@ -17,41 +20,46 @@ export class LoginComponent implements OnInit {
 	error: boolean;
 	resume: Function;
   accessCode: string;
-  constructor(private http: HttpClient) {}
+
+  setData(resume: Function) {
+		this.resume = resume;
+	}
+
+  constructor(private http: HttpClient, private router: Router, private userService: UserService) {}
 
   ngOnInit() {
-    // this.http.get('https://localhost:8443/api/accesstoken', {
-    //       headers: new HttpHeaders({'Custom-Code': 'sfsafsdf'})
-    //   }).subscribe(data => {
-    //     // Read the result field from the JSON response.
-    //     // this.results = data['results'];
-    //     console.log(data);
-    //     this.accessCode = data['accessKey']
-    //   });
-    httpGet('http://mfoglight.azurewebsites.net/api/accesstoken',
-      {headers: {'Custom-Code': 'sfsafsdf', 'Content-Type': FORM_CONTENT_TYPE}}).then(extractJSON).then(o => {
-        // this.login(o);
-        this.accessCode = 'SjmdqbeeqkvLV/SnpzGa8v0e5Us=';//o.data['accessKey'];
-        console.log(this.accessCode);
 
-      }).catch(error => {
 
-      });
   }
 
-  login(result) {
+  login(accessCode) {
     this.error = false;
     this.message = 'Checking user and password...';
 
-    console.log("access key is "+ result);
-
+    console.log("access key is "+ accessCode);
+    localStorage['accessCode'] = accessCode;
     let data = 'username=' + encodeURIComponent(this.user) +
       '&pwd=' + encodeURIComponent(this.password);
-    httpPost('http://mfoglight.azurewebsites.net/api/v1/security/login', FORM_CONTENT_TYPE, data,
-    {headers: {'Access-Key': result}}).then(extractJSON).then(o => {
-      // this.resume(o.token);
-      // this.close();
+
+
+
+    httpPost('/api/v1/security/login', FORM_CONTENT_TYPE, data,
+    /* {headers: {'Access-Key': accessCode}}*/).then(extractJSON).then(o => {
+      // this.router.navigate(['/console/dashboard']);
+      // this.resume(o.data['access-token']);
+      if (o.data['access-token']) {
+        localStorage['authToken'] = o.data['access-token'];
+        this.userService.userInfo = o.data['user'] as User;
+        console.log(this.userService.userInfo);
+        localStorage['userInfo'] = JSON.stringify(this.userService.userInfo);
+
+      }
+
+
+      // window.location.href = '/console';
+
       console.log(o);
+      this.router.navigate(['/console/dashboard']);
 
     }).catch(error => {
       this.error = true;
@@ -64,22 +72,20 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  submit() {
-    // httpGet('https://localhost:8443/api/accesstoken',
-    //   {headers: {'Custom-Code': 'sfsafsdf'}}).then(extractJSON).then(o => {
-    //     this.login(o);
-    //   }).catch(error => {
+  submit(e) {
 
-    //   });
-      // this.http.post('http://localhost:8085/api/v1/security/login', {
-      //     headers: new HttpHeaders({'Access-Key': this.accessCode, 'Content-Type':'application/x-www-form-urlencoded'})
-      // }).subscribe(data => {
-      //   // Read the result field from the JSON response.
-      //   // this.results = data['results'];
-      //   console.log(data);
-      //   // this.accessCode = data['accessKey']
-      // });
-      this.login(this.accessCode);
+    httpGet('/api/mtoken',
+      {headers: {'Custom-Code': 'Quest', 'Content-Type': FORM_CONTENT_TYPE}}).then(extractJSON).then(o => {
+
+        this.accessCode = o.data['mtoken'];
+        console.log(this.accessCode);
+        this.login(this.accessCode);
+
+      }).catch(error => {
+
+      });
+    // showCommonModal();
+
   }
 
 }

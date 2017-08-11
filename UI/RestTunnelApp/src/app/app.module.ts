@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -13,53 +14,9 @@ import { ConsoleComponent } from './console/console.component';
 import { LoginRoutingModule } from './Common/login-routing.module';
 import { FormsModule }        from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { BoxChartComponent } from './dashboard/widgets/box-chart/box-chart.component';
+import { UserService } from './Common/user.service';
 
-const routes: Routes = [
-  // { path: '', component: Component, canActivate: [AuthGuard] },
-  {
-    path: '',
-    redirectTo: '/console',
-    pathMatch: 'full',
-    // canActivate: [CanActivateAuthGuard]
-  },
-  {
-    path: 'console',
-    component: ConsoleComponent,
-    // canActivate: [CanActivateAuthGuard],
-    children: [
-      {
-        path: '',
-        children: [
-          { path: '', redirectTo: '/console/dashboard', pathMatch: 'full' },
-          { path: 'dashboard', component: DashboardComponent },
-          // { path: 'heroes', component: ManageHeroesComponent },
-          // { path: '', component: AdminDashboardComponent }
-        ],
-      }
-    ]
-  },
-  {
-    path: 'login',
-    component: LoginComponent
-  },
-  // {
-  //   path: 'detail/:id',
-  //   component: HeroDetailComponent
-  // },
-  // {
-  //   path: 'hero/:id',
-  //   component: HeroComponent
-  // },
-  // {
-  //   path: 'about',
-  //   component: AboutComponent
-  // },
-  // {
-  //   path: 'info',
-  //   component: InfoComponent
-  // }
-
-];
 
 const components: any[] = [
   AppComponent,
@@ -69,6 +26,7 @@ const components: any[] = [
   MainMenuComponent,
   FooterComponent,
   ConsoleComponent,
+  BoxChartComponent,
 ];
 
 @NgModule({
@@ -80,7 +38,7 @@ const components: any[] = [
     FormsModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [UserService, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

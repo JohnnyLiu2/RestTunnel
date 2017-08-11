@@ -1,5 +1,5 @@
 export const FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded; charset=utf-8';
-
+const HOST_URL = 'http://mfoglight.azurewebsites.net'
 export interface HttpOptions {
 	headers?: any;
 }
@@ -69,9 +69,15 @@ var http: Function = (<any> window).fetch ?
 		}
 		let token = localStorage['authToken'];
 		if (token) {
-			headers.set('Authorization', 'X-Token ' + token);
-		}
+			headers.set('Auth-Token', token);
+    }
 
+    let accessCode = localStorage['accessCode'];
+		if (token) {
+			headers.set('access-key', accessCode);
+    }
+
+    url = HOST_URL + url;
 		return fetch(url, {method, headers, body})
 			.then(response => {
 				if (response.status != 401) {
@@ -147,7 +153,7 @@ var http: Function = (<any> window).fetch ?
 			}
 			let token = localStorage['authToken'];
 			if (token) {
-				r.setRequestHeader('Authorization', 'X-Token ' + token);
+				r.setRequestHeader('Auth-Token', token);
 			}
 			r.send(body);
 		})

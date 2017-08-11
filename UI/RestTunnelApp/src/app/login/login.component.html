@@ -21,7 +21,9 @@
                             <span class="add-on"><i class="halflings-icon lock"></i></span>
                             <input #passwordField class="input-large span10" name="password" id="password" type="password" (input)="password = passwordField.value" placeholder="type password" />
                         </div>
+                        <label class="remember" *ngIf="message">{{message}}</label>
                         <div class="clearfix"></div>
+
 
                         <label class="remember" for="remember"><input type="checkbox" id="remember" />Remember me</label>
 
@@ -47,11 +49,3 @@
 
 </div>
 <!--/fluid-row-->
-<div class="common-modal modal fade" id="common-Modal1" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-content">
-        <ul class="list-inline item-details">
-            <li><a href="http://themifycloud.com">Admin templates</a></li>
-            <li><a href="http://themescloud.org">Bootstrap themes</a></li>
-        </ul>
-    </div>
-</div>
