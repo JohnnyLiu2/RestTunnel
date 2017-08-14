@@ -26,13 +26,10 @@
 package com.quest.forge.rest.tunnel.server.filter;
 
 import static com.quest.forge.rest.tunnel.common.Constants.*;
-import static com.quest.forge.rest.tunnel.server.util.KeystoreUtil.sha1;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Base64;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -43,9 +40,13 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
+import org.apache.commons.text.RandomStringGenerator;
+import com.quest.forge.rest.tunnel.server.pojo.AbnormalResponse;
+import com.quest.forge.rest.tunnel.server.pojo.NormalResponse;
+import com.quest.forge.rest.tunnel.server.pojo.TTokenResponseData;
 import com.quest.forge.rest.tunnel.server.service.ServiceFactory;
 import com.quest.forge.rest.tunnel.server.util.KeystoreUtil;
+import com.quest.forge.rest.tunnel.server.util.ResponseUtil;
 
 /**
  * Assign access key for custom code.
@@ -53,9 +54,9 @@ import com.quest.forge.rest.tunnel.server.util.KeystoreUtil;
  * @author jwang7
  *
  */
-public class RequestAccessKeyFilter implements Filter {
+public class RequestTunnelAccessKeyFilter implements Filter {
 
-	private final static Log logger = LogFactory.getLog(RequestAccessKeyFilter.class.getName());
+	private final static Log logger = LogFactory.getLog(RequestTunnelAccessKeyFilter.class);
 
 	@Override
 	public void destroy() {
@@ -67,23 +68,36 @@ public class RequestAccessKeyFilter implements Filter {
 		if (request instanceof HttpServletRequest) {
 			String customCode = ((HttpServletRequest) request).getHeader(HTTP_HEADER_CUSTOM_CODE);
 			String method = ((HttpServletRequest) request).getMethod();
+			String errorCode = null;
 			response.setContentType("application/json");
 			if (method != null && "GET".equalsIgnoreCase(method)) {
 				if (customCode != null) {
 					try {
-						String accessKey = Base64.getEncoder().encodeToString(sha1(ServiceFactory.getInstance()
-								.getAccessKeyManager().generateAccessKey(customCode).getBytes()));
-						response.getWriter().write("{\"status\":1,\"data\":{\"accessKey\":\"" + accessKey + "\"}}");
+						String ttoken = ServiceFactory.getInstance().getAccessKeyManager()
+								.generateAccessKey(customCode);
+						response.getWriter().write(
+								ResponseUtil.parseResponse(
+										new NormalResponse( 
+												new TTokenResponseData(
+														new RandomStringGenerator.Builder()
+															.withinRange('a', 'z')
+															.withinRange('A', 'Z')
+															.build()
+															.generate(8),
+														ttoken))));
+						return;
 					} catch (Exception e) {
-						response.getWriter()
-								.write("{\"status\":0,\"code\":\"findKeyPairFailed\"}");
+						errorCode = "genTunnelAccessKeyFailed";
 					}
 				} else {
-					response.getWriter().write("{\"status\":0,\"code\":\"customCodeNotFound\"}");
+					errorCode = "customCodeNotFound";
 				}
 			} else {
-				response.getWriter().write("{\"status\":0,\"code\":\"invalidMethodFound\"}");
+				errorCode = "invalidMethodFound";
 			}
+			response.getWriter().write(
+					ResponseUtil.parseResponse(
+							new AbnormalResponse(errorCode)));
 		}
 	}
 
