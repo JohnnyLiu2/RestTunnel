@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { httpGet, extractJSON } from '../Common/http';
+import { httpGet, extractJSON, httpPost, FORM_CONTENT_TYPE, HttpError } from '../Common/http';
 import { ResponseModel } from '../models/response.model';
 import { AlarmModel } from '../models/alarm.model';
 import { DatePipe } from '@angular/common';
+import { DashboardQueryService } from '../data.service.ts/dashboard-query.service';
 declare function sparkline_charts(): any;
 
 @Component({
@@ -13,10 +14,15 @@ declare function sparkline_charts(): any;
 export class DashboardComponent implements OnInit {
   alarmCount;
   chartDisplayData: string;
-  constructor(public datepipe: DatePipe) { }
+  constructor(public datepipe: DatePipe, private dataQueryService: DashboardQueryService) { }
 
   ngOnInit() {
     this.getHistoryAlarms();
+    // this.query();
+    this.dataQueryService.getCurrentHostMonitorInfo(memory => {
+      console.log(memory);
+
+    }, null);
   }
 
   getLastHours(hour: number): string[] {
@@ -40,7 +46,7 @@ export class DashboardComponent implements OnInit {
 
       const timeData: {[date: string]: number} = {};
 
-      const lastHours = this.getLastHours(16);
+      const lastHours = this.getLastHours(48);
       console.log(lastHours);
 
       result.data.forEach(element => {
@@ -60,16 +66,30 @@ export class DashboardComponent implements OnInit {
         displayData.push(timeData[item] || 0);
       });
 
-      const chartData = displayData.join(',');
+      const chartData = displayData.slice(displayData.length - 17, displayData.length - 1).join(',');
       console.log(chartData);
       this.chartDisplayData = chartData;
       setTimeout(sparkline_charts, 0.1);
+
+      // let chartData
 
     }).catch(error => {
 
     });
 
   }
+
+  query() {
+    httpPost('/api/v1/topology/query', 'application/json', "{'queryText': '!Host'}").then(extractJSON).then(o => {
+      console.log(o);
+
+    }).catch(error => {
+
+    });
+
+  }
+
+
 }
 
 

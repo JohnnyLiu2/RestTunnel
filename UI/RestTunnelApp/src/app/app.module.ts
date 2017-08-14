@@ -16,6 +16,7 @@ import { FormsModule }        from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BoxChartComponent } from './dashboard/widgets/box-chart/box-chart.component';
 import { UserService } from './Common/user.service';
+import { DashboardQueryService } from './data.service.ts/dashboard-query.service';
 
 
 const components: any[] = [
@@ -38,7 +39,7 @@ const components: any[] = [
     FormsModule,
     HttpClientModule,
   ],
-  providers: [UserService, DatePipe],
+  providers: [UserService, DatePipe, DashboardQueryService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

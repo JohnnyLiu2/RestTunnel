@@ -47,8 +47,8 @@ export class LoginComponent implements OnInit {
     /* {headers: {'Access-Key': accessCode}}*/).then(extractJSON).then(o => {
       // this.router.navigate(['/console/dashboard']);
       // this.resume(o.data['access-token']);
-      if (o.data['access-token']) {
-        localStorage['authToken'] = o.data['access-token'];
+      if (o.data['token']) {
+        localStorage['authToken'] = o.data['token'];
         this.userService.userInfo = o.data['user'] as User;
         console.log(this.userService.userInfo);
         localStorage['userInfo'] = JSON.stringify(this.userService.userInfo);

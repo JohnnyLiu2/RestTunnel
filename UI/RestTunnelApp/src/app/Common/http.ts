@@ -1,5 +1,7 @@
 export const FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded; charset=utf-8';
-const HOST_URL = 'http://mfoglight.azurewebsites.net'
+const HOST_URL = 'http://mfoglight.azurewebsites.net';
+// const HOST_URL = 'http://10.30.154.102:8080';
+
 export interface HttpOptions {
 	headers?: any;
 }

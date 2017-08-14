@@ -1059,7 +1059,7 @@ function sparkline_charts() {
 
 /* ---------- Charts ---------- */
 
-function charts() {
+function charts(alamsData) {
 
     function randNum() {
         return ((Math.floor(Math.random() * (1 + 40 - 20))) + 20) * 1200;
@@ -1202,7 +1202,7 @@ function charts() {
             [27, 80 + randNum3()],
             [28, 85 + randNum3()],
             [29, 90 + randNum3()],
-            [30, 95 + randNum3()]
+            [32, 95 + randNum3()]
         ];
         var newVisitors = [
             [1, randNum4() - 10],
@@ -1237,25 +1237,28 @@ function charts() {
             [30, 31 + randNum4()]
         ];
 
-        var plot = $.plot($("#stats-chart2"), [{
-            data: visitors,
-            label: "Visits",
-            lines: {
-                show: true,
-                fill: false,
-                lineWidth: 2
-            },
-            shadowSize: 0
-        }, {
-            data: pageviews,
-            bars: {
-                show: true,
-                fill: false,
-                barWidth: 0.1,
-                align: "center",
-                lineWidth: 5,
+        var plot = $.plot($("#stats-chart2"), [
+            /*{
+                        data: visitors,
+                        label: "Visits",
+                        lines: {
+                            show: true,
+                            fill: false,
+                            lineWidth: 2
+                        },
+                        shadowSize: 0
+                    }, */
+            {
+                data: alamsData,
+                bars: {
+                    show: true,
+                    fill: false,
+                    barWidth: 0.1,
+                    align: "center",
+                    lineWidth: 5,
+                }
             }
-        }], {
+        ], {
 
             grid: {
                 hoverable: true,
