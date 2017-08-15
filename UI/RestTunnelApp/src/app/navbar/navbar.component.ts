@@ -22,15 +22,17 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
-    httpGet('/api/v1/security/logout').then(extractJSON).then(o => {
-      this.router.navigate(['/login']);
-    }).catch(error => {
-      this.router.navigate(['/login']);
-    });
     localStorage['userInfo'] = null;
       localStorage['authToken'] = null;
       localStorage['accessCode'] = null;
       this.userService.userInfo = null;
+    const navigateToLogin = () => { this.router.navigate(['/login']); };
+    httpGet('/api/v1/security/logout').then(extractJSON).then(o => {
+      navigateToLogin();
+    }).catch(error => {
+      navigateToLogin();
+    });
+
 
   }
 

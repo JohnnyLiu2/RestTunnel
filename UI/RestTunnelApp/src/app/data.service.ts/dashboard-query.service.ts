@@ -9,7 +9,7 @@ export class DashboardQueryService {
     return httpGet('/api/v1/topology/' + uniqueId + '/' + metricName + '/current');
   }
 
-  getCurrentHostMonitorInfo(memory: any, cpus: any, storage: any, network: any) {
+  getCurrentHostMonitorInfo(memory: any, cpus: any, storage: any, network: any, failed: any) {
     httpPost('/api/v1/topology/query', 'application/json', '{"queryText": "!Host"}').then(extractJSON).then(o => {
       console.log(o);
       const property = o.data[0]['properties'];
@@ -77,7 +77,7 @@ export class DashboardQueryService {
 
 
     }).catch(error => {
-
+      failed(error);
     });
   }
 

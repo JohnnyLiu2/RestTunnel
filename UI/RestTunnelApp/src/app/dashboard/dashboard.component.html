@@ -12,7 +12,7 @@
 
     <div class="row-fluid hideInIE8 circleStats">
 
-        <div class="span2" onTablet="span4" onDesktop="span2">
+        <div class="span3" onTablet="span6" onDesktop="span3">
             <div class="circleStatsItemBox yellow" id="storage_circleStatsItemBox">
                 <div class="header">Host Storage</div>
                 <span class="percent">percent</span>
@@ -35,7 +35,7 @@
 
 
 
-        <div class="span2" onTablet="span4" onDesktop="span2">
+        <div class="span3" onTablet="span6" onDesktop="span3">
             <div class="circleStatsItemBox red" id="memory_circleStatsItemBox">
                 <div class="header">Memory Utilization</div>
                 <span class="percent">percent</span>
@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <div class="span2 noMargin" onTablet="span4" onDesktop="span2">
+        <div class="span3 noMargin" onTablet="span6" onDesktop="span3">
             <div class="circleStatsItemBox pink" id="cpus_circleStatsItemBox">
                 <div class="header">CPU Utilization</div>
                 <span class="percent">percent</span>
@@ -77,12 +77,12 @@
             </div>
         </div>
 
-        <div class="span2" onTablet="span4" onDesktop="span2">
+        <div class="span3" onTablet="span6" onDesktop="span3">
             <div class="circleStatsItemBox green" id="network_circleStatsItemBox">
                 <div class="header">Network Utilization</div>
                 <span class="percent">percent</span>
                 <div class="circleStat">
-                    <input type="text" value="{{ networkUtilization | number:'1.0-2' }}" class="whiteCircle" id="network_whiteCircle" />
+                    <input type="text" value="{{ (networkUtilization | number:'1.0-2') || 0 }}" class="whiteCircle" id="network_whiteCircle" />
                 </div>
                 <div class="footer">
                     <span class="count">
@@ -98,7 +98,7 @@
             </div>
         </div>
 
-        <div class="span2" onTablet="span4" onDesktop="span2">
+        <!-- <div class="span2" onTablet="span4" onDesktop="span2">
             <div class="circleStatsItemBox blue">
                 <div class="header">Memory</div>
                 <span class="percent">percent</span>
@@ -138,28 +138,28 @@
                     </span>
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
     </div>
 
-    <div class="row-fluid">
+    <!-- <div class="row-fluid">
         <div class="span3 statbox red" onTablet="span6" onDesktop="span3" app-box-chart [totalNumber]="alarmCount" title="Alarms" [chartData]="chartDisplayData"></div>
         <div class="span3 statbox blue" onTablet="span6" onDesktop="span3" app-box-chart [totalNumber]="alarmCount" title="Alarms"></div>
         <div class="span3 statbox green" onTablet="span6" onDesktop="span3" app-box-chart [totalNumber]="alarmCount" title="Alarms"></div>
         <div class="span3 statbox yellow" onTablet="span6" onDesktop="span3" app-box-chart [totalNumber]="alarmCount" title="Alarms"></div>
 
-    </div>
+    </div> -->
 
     <div class="row-fluid">
 
-        <div class="span8 widget blue" onTablet="span7" onDesktop="span8">
+        <div class="span12 widget blue" onTablet="span12" onDesktop="span12">
 
             <div id="stats-chart2" style="height:282px"></div>
 
         </div>
 
-        <div class="sparkLineStats span4 widget green" onTablet="span5" onDesktop="span4">
+        <!-- <div class="sparkLineStats span4 widget green" onTablet="span5" onDesktop="span4">
 
             <ul class="unstyled">
 
@@ -185,13 +185,13 @@
 
             <div class="clearfix"></div>
 
-        </div>
+        </div> -->
         <!-- End .sparkStats -->
 
     </div>
 
 
-    <div class="row-fluid">
+    <!-- <div class="row-fluid">
 
         <div class="widget blue span5" onTablet="span6" onDesktop="span5">
 
@@ -349,10 +349,10 @@
 
             </div>
 
-        </div>
-        <!--/span-->
+        </div> -->
+    <!--/span-->
 
-        <!-- <div class="widget span3 red" onTablet="span6" onDesktop="span3">
+    <!-- <div class="widget span3 red" onTablet="span6" onDesktop="span3">
 
             <h2><span class="glyphicons pie_chart"><i></i></span> Browsers</h2>
 
@@ -385,7 +385,7 @@
             </div>
         </div> -->
 
-        <div class="widget yellow span7 noMargin" onTablet="span12" onDesktop="span7">
+    <!-- <div class="widget yellow span7 noMargin" onTablet="span12" onDesktop="span7">
             <h2><span class="glyphicons fire"><i></i></span> Server Load</h2>
             <hr>
             <div class="content">
@@ -393,7 +393,7 @@
             </div>
         </div>
 
-    </div>
+    </div> -->
 
     <!-- <div class="row-fluid">
 
@@ -567,27 +567,29 @@
 </div> -->
 
 
-    <!-- <div class="row-fluid">
+    <div class="row-fluid">
 
-        <a class="quick-button metro yellow span2">
-            <i class="icon-group"></i>
-            <p>Users</p>
-            <span class="badge">237</span>
+        <a class="quick-button metro yellow span3">
+            <i class="icon-bell"></i>
+            <p>Alarms</p>
+            <span class="badge">{{ alarmCount }}</span>
         </a>
-        <a class="quick-button metro red span2">
-            <i class="icon-comments-alt"></i>
-            <p>Comments</p>
-            <span class="badge">46</span>
+        <a class="quick-button metro red span3">
+            <i class="icon-screenshot"></i>
+            <p>Rules</p>
+            <span class="badge">{{ totalRules }}</span>
         </a>
-        <a class="quick-button metro blue span2">
-            <i class="icon-shopping-cart"></i>
-            <p>Orders</p>
-            <span class="badge">13</span>
+        <a class="quick-button metro blue span3">
+            <i class="icon-gift"></i>
+            <p>Cartridges</p>
+            <span class="badge">{{ totalCartridges }}</span>
         </a>
-        <a class="quick-button metro green span2">
-            <i class="icon-barcode"></i>
-            <p>Products</p>
+        <a class="quick-button metro green span3">
+            <i class="icon-user"></i>
+            <p>Agents</p>
+            <span class="badge">{{ totalAgents }}</span>
         </a>
+        <!--
         <a class="quick-button metro pink span2">
             <i class="icon-envelope"></i>
             <p>Messages</p>
@@ -596,11 +598,11 @@
         <a class="quick-button metro black span2">
             <i class="icon-calendar"></i>
             <p>Calendar</p>
-        </a>
+        </a> -->
 
         <div class="clearfix"></div>
 
-    </div> -->
+    </div>
     <!--/row-->
 
 

@@ -30,11 +30,38 @@ export class DashboardComponent implements OnInit {
   networkUtilization: number;
   networkBandwidth: number;
 
+  totalRules: number;
+  totalCartridges: number;
+  totalAgents: number;
+
   constructor(public datepipe: DatePipe, private dataQueryService: DashboardQueryService) { }
 
   ngOnInit() {
     this.getHistoryAlarms();
     this.getHostInfo();
+    this.getRules();
+    this.getCartridges();
+    this.getAgents();
+  }
+
+  getAgents() {
+    httpGet('/api/v1/agent/allAgents').then(extractJSON).then(o => {
+      this.totalAgents = o.data.length;
+    });
+  }
+
+  getCartridges() {
+    httpGet('/api/v1/cartridge/allCartridges').then(extractJSON).then(o => {
+      this.totalRules = o.data.length;
+    });
+
+  }
+
+  getRules() {
+    httpGet('/api/v1/rule/allRules').then(extractJSON).then(o => {
+      this.totalCartridges = o.data.length;
+    });
+
   }
 
   getHostInfo() {
@@ -50,7 +77,7 @@ export class DashboardComponent implements OnInit {
       }, 0.1);
     }, cpus => {
       this.cpusUtilization = cpus.utilization;
-      this.cpusTotal = cpus.total / 1024.0;
+      this.cpusTotal = cpus.total / 1000.0;
       setTimeout( () => {
         circle_progess('cpus');
       }, 0.1);
@@ -71,7 +98,13 @@ export class DashboardComponent implements OnInit {
       setTimeout(function() {
         circle_progess('network');
       }, 0.1);
+    }, failed => {
+
     });
+
+    setTimeout(function() {
+        circle_progess('network');
+      }, 0.1);
   }
 
   getLastHours(hour: number): string[] {
@@ -116,7 +149,7 @@ export class DashboardComponent implements OnInit {
       });
 
       // Slice 16 hours for mini chart.
-      const chartData = displayData.slice(displayData.length - 17, displayData.length).join(',');
+      const chartData = displayData.slice(displayData.length - 14, displayData.length - 1).join(',');
       console.log(chartData);
       this.chartDisplayData = chartData;
 

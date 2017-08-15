@@ -31,13 +31,13 @@ const appRoutes: Routes = [
     // {
     path: 'console',
     component: ConsoleComponent,
-    // canActivate: [CanActivateAuthGuard],
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
         children: [
           { path: '', redirectTo: '/console/dashboard', pathMatch: 'full' },
-          { path: 'dashboard', component: DashboardComponent },
+          { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
           // { path: 'heroes', component: ManageHeroesComponent },
           // { path: '', component: AdminDashboardComponent }
         ],
@@ -64,6 +64,7 @@ const appRoutes: Routes = [
   ],
   providers: [
     // CanDeactivateGu
+    AuthGuard
  ]
 })
 export class AppRoutingModule {}
