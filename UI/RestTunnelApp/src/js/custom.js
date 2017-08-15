@@ -109,7 +109,7 @@ $(document).ready(function() {
     template_functions();
     init_masonry();
     sparkline_charts();
-    charts();
+    // charts();
     calendars();
     growlLikeNotifications();
     widthFunctions();
@@ -123,7 +123,7 @@ $(document).ready(function() {
 
     } else {
 
-        circle_progess();
+        // circle_progess();
 
     }
 
@@ -703,13 +703,13 @@ function template_functions() {
 
 /* ---------- Circle Progess Bars ---------- */
 
-function circle_progess() {
+function circle_progess(elementId) {
 
     var divElement = $('div'); //log all div elements
 
     if (retina()) {
 
-        $(".whiteCircle").knob({
+        $("#" + elementId + "_whiteCircle").knob({
             'min': 0,
             'max': 100,
             'readOnly': true,
@@ -728,7 +728,7 @@ function circle_progess() {
 
     } else {
 
-        $(".whiteCircle").knob({
+        $("#" + elementId + "_whiteCircle").knob({
             'min': 0,
             'max': 100,
             'readOnly': true,
@@ -745,25 +745,26 @@ function circle_progess() {
 
 
 
-    $(".circleStatsItemBox").each(function() {
+    var circleStatsItemBox = $("#" + elementId + "_circleStatsItemBox");
 
-        var value = $(this).find(".value > .number").html();
-        var unit = $(this).find(".value > .unit").html();
-        var percent = $(this).find("input").val() / 100;
+    var value = circleStatsItemBox.find(".value > .number").html();
+    var unit = circleStatsItemBox.find(".value > .unit").html();
+    var percent = circleStatsItemBox.find("input").val() / 100.0;
+    // alert(percent);
 
-        countSpeed = 2300 * percent;
+    countSpeed = 2300 * percent;
 
-        endValue = value * percent;
+    endValue = value * percent;
 
-        $(this).find(".count > .unit").html(unit);
-        $(this).find(".count > .number").countTo({
+    circleStatsItemBox.find(".count > .unit").html(unit);
+    circleStatsItemBox.find(".count > .number").countTo({
 
-            from: 0,
-            to: endValue,
-            speed: countSpeed,
-            refreshInterval: 50
+        from: 0,
+        to: endValue,
+        speed: countSpeed,
+        refreshInterval: 50
 
-        });
+        // });
 
         //$(this).find(".count").html(value*percent + unit);
 
@@ -1059,7 +1060,7 @@ function sparkline_charts() {
 
 /* ---------- Charts ---------- */
 
-function charts(alamsData) {
+function charts(alamsData, axisData) {
 
     function randNum() {
         return ((Math.floor(Math.random() * (1 + 40 - 20))) + 20) * 1200;
@@ -1237,6 +1238,15 @@ function charts(alamsData) {
             [30, 31 + randNum4()]
         ];
 
+
+        // var options = {
+        //     xaxis: {
+        //         ticks: [
+        //             axisData
+        //         ]
+        //     }
+        // };
+
         var plot = $.plot($("#stats-chart2"), [
             /*{
                         data: visitors,
@@ -1270,7 +1280,7 @@ function charts(alamsData) {
                 show: false
             },
             colors: ["rgba(255,255,255,0.8)", "rgba(255,255,255,0.6)", "rgba(255,255,255,0.4)", "rgba(255,255,255,0.2)"],
-            xaxis: { ticks: 15, tickDecimals: 0, color: "rgba(255,255,255,0.8)" },
+            xaxis: { ticks: axisData, tickDecimals: 0, color: "rgba(255,255,255,0.8)" },
             yaxis: { ticks: 5, tickDecimals: 0, color: "rgba(255,255,255,0.8)" },
         });
 
@@ -1298,6 +1308,7 @@ function charts(alamsData) {
         		yaxis: {ticks:5, tickDecimals: 0},
         	 });
         */
+
 
 
 

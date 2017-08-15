@@ -4,7 +4,10 @@ import { ResponseModel } from '../models/response.model';
 import { AlarmModel } from '../models/alarm.model';
 import { DatePipe } from '@angular/common';
 import { DashboardQueryService } from '../data.service.ts/dashboard-query.service';
-declare function sparkline_charts(): any;
+import { MemoryInfoModel } from '../models/memory-info.model';
+declare function sparkline_charts();
+declare function circle_progess(elementId);
+declare function charts(alamsData, axisData);
 
 @Component({
   selector: 'app-dashboard',
@@ -14,15 +17,61 @@ declare function sparkline_charts(): any;
 export class DashboardComponent implements OnInit {
   alarmCount;
   chartDisplayData: string;
+
+  memoryTotal: number;
+  memoryUtilization: number;
+
+  cpusUtilization: number;
+  cpusTotal: number;
+
+  storageUtilization: number;
+  storageTotal: number;
+
+  networkUtilization: number;
+  networkBandwidth: number;
+
   constructor(public datepipe: DatePipe, private dataQueryService: DashboardQueryService) { }
 
   ngOnInit() {
     this.getHistoryAlarms();
-    // this.query();
+    this.getHostInfo();
+  }
+
+  getHostInfo() {
     this.dataQueryService.getCurrentHostMonitorInfo(memory => {
       console.log(memory);
 
-    }, null);
+      this.memoryUtilization = memory.utilization;
+      this.memoryTotal = memory.total / 1024.0;
+
+      // setTimeout(circle_progess, 0.1);
+      setTimeout( () => {
+        circle_progess('memory');
+      }, 0.1);
+    }, cpus => {
+      this.cpusUtilization = cpus.utilization;
+      this.cpusTotal = cpus.total / 1024.0;
+      setTimeout( () => {
+        circle_progess('cpus');
+      }, 0.1);
+      // setTimeout(circle_progess, 0.1);
+    }, storage => {
+      console.log('storage utilization:' + storage.utilization);
+
+      this.storageUtilization = storage.utilization;
+      this.storageTotal = storage.total / 1024.0;
+
+      setTimeout( () => {
+        circle_progess('storage');
+      }, 0.1);
+    }, network => {
+      this.networkBandwidth = network.bandwidth;
+      this.networkUtilization = network.utilization;
+
+      setTimeout(function() {
+        circle_progess('network');
+      }, 0.1);
+    });
   }
 
   getLastHours(hour: number): string[] {
@@ -46,7 +95,7 @@ export class DashboardComponent implements OnInit {
 
       const timeData: {[date: string]: number} = {};
 
-      const lastHours = this.getLastHours(48);
+      const lastHours = this.getLastHours(24);
       console.log(lastHours);
 
       result.data.forEach(element => {
@@ -66,12 +115,33 @@ export class DashboardComponent implements OnInit {
         displayData.push(timeData[item] || 0);
       });
 
-      const chartData = displayData.slice(displayData.length - 17, displayData.length - 1).join(',');
+      // Slice 16 hours for mini chart.
+      const chartData = displayData.slice(displayData.length - 17, displayData.length).join(',');
       console.log(chartData);
       this.chartDisplayData = chartData;
-      setTimeout(sparkline_charts, 0.1);
 
-      // let chartData
+
+
+      let bigChartData = [];
+      let axisData = [];
+      console.log(lastHours.join(','));
+
+      lastHours.forEach((item, index) => {
+        const tempList = [index, displayData[index]];
+        console.log(item.substr(8, 2) + '-' + displayData[index]);
+
+        bigChartData.push(tempList);
+        axisData.push([index, item.substr(8, 2)]);
+
+
+      });
+
+      console.log(axisData);
+
+      setTimeout(() => {
+        sparkline_charts();
+        charts(bigChartData, axisData);
+      }, 0.1);
 
     }).catch(error => {
 
@@ -80,7 +150,7 @@ export class DashboardComponent implements OnInit {
   }
 
   query() {
-    httpPost('/api/v1/topology/query', 'application/json', "{'queryText': '!Host'}").then(extractJSON).then(o => {
+    httpPost('/api/v1/topology/query', 'application/json', '{"queryText": "!Host"}').then(extractJSON).then(o => {
       console.log(o);
 
     }).catch(error => {
