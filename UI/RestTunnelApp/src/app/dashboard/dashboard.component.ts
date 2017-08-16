@@ -5,6 +5,12 @@ import { AlarmModel } from '../models/alarm.model';
 import { DatePipe } from '@angular/common';
 import { DashboardQueryService } from '../data.service.ts/dashboard-query.service';
 import { MemoryInfoModel } from '../models/memory-info.model';
+import $ from 'jquery';
+import 'jquery-easy-loading';
+// import 'gasparesganga-jquery-loading-overlay';
+import { loading } from 'jquery-easy-loading';
+
+
 declare function sparkline_charts();
 declare function circle_progess(elementId);
 declare function charts(alamsData, axisData);
@@ -33,10 +39,21 @@ export class DashboardComponent implements OnInit {
   totalRules: number;
   totalCartridges: number;
   totalAgents: number;
+  loadingElement: string[] = [
+                          'memory_circleStatsItemBox',
+                          'storage_circleStatsItemBox',
+                          'cpus_circleStatsItemBox',
+                          'alarm-count',
+                          'total-rules',
+                          'total-cartridges',
+                          'total-agents',
+                          'stats-chart-box'
+                        ];
 
   constructor(public datepipe: DatePipe, private dataQueryService: DashboardQueryService) { }
 
   ngOnInit() {
+    this.createLoadingOverlay();
     this.getHistoryAlarms();
     this.getHostInfo();
     this.getRules();
@@ -44,15 +61,35 @@ export class DashboardComponent implements OnInit {
     this.getAgents();
   }
 
+  createLoadingOverlay() {
+
+
+    this.loadingElement.forEach(value => {
+      $('#' + value).loading('start');
+    });
+
+    window.addEventListener('resize', () => {
+      this.loadingElement.forEach(value => {
+        $('#' + value).loading('resize');
+      });
+    });
+  }
+
   getAgents() {
     httpGet('/api/v1/agent/allAgents').then(extractJSON).then(o => {
       this.totalAgents = o.data.length;
+      setTimeout(function() {
+        $('#total-agents').loading('stop');
+      }, 0.1);
     });
   }
 
   getCartridges() {
     httpGet('/api/v1/cartridge/allCartridges').then(extractJSON).then(o => {
       this.totalRules = o.data.length;
+      setTimeout(function() {
+        $('#total-cartridges').loading('stop');
+      }, 0.1);
     });
 
   }
@@ -60,11 +97,19 @@ export class DashboardComponent implements OnInit {
   getRules() {
     httpGet('/api/v1/rule/allRules').then(extractJSON).then(o => {
       this.totalCartridges = o.data.length;
+      setTimeout(function() {
+        $('#total-rules').loading('stop');
+      }, 0.1);
     });
 
   }
 
   getHostInfo() {
+
+    // $("#memory_circleStatsItemBox").LoadingOverlay("show");
+
+// Here we might call the "hide" action 2 times, or simply set the "force" parameter to true:
+
     this.dataQueryService.getCurrentHostMonitorInfo(memory => {
       console.log(memory);
 
@@ -74,12 +119,15 @@ export class DashboardComponent implements OnInit {
       // setTimeout(circle_progess, 0.1);
       setTimeout( () => {
         circle_progess('memory');
+        $('#memory_circleStatsItemBox').loading('stop');
+        // $("#memory_circleStatsItemBox").LoadingOverlay("hide", true);
       }, 0.1);
     }, cpus => {
       this.cpusUtilization = cpus.utilization;
       this.cpusTotal = cpus.total / 1000.0;
       setTimeout( () => {
         circle_progess('cpus');
+        $('#cpus_circleStatsItemBox').loading('stop');
       }, 0.1);
       // setTimeout(circle_progess, 0.1);
     }, storage => {
@@ -90,6 +138,7 @@ export class DashboardComponent implements OnInit {
 
       setTimeout( () => {
         circle_progess('storage');
+        $('#storage_circleStatsItemBox').loading('stop');
       }, 0.1);
     }, network => {
       this.networkBandwidth = network.bandwidth;
@@ -173,7 +222,10 @@ export class DashboardComponent implements OnInit {
 
       setTimeout(() => {
         sparkline_charts();
+
         charts(bigChartData, axisData);
+        $('#stats-chart-box').loading('stop');
+        $('#alarm-count').loading('stop');
       }, 0.1);
 
     }).catch(error => {
@@ -192,6 +244,10 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  ngOnDestroy() {
+
+    $('.loading-overlay').hide();
+  }
 
 }
 
