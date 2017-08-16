@@ -13,22 +13,12 @@ import { ConsoleComponent } from '../console/console.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 
 const appRoutes: Routes = [
-  // {
-  //   path: 'compose',
-  //   component: ComposeMessageComponent,
-  //   outlet: 'popup'
-  // },
    {
     path: '',
     redirectTo: '/console/dashboard',
     pathMatch: 'full',
-    // canActivate: [CanActivateAuthGuard]
   },
   {
-    // path: 'console',
-    // loadChildren: 'app/admin/admin.module#AdminModule',
-    // canLoad: [AuthGuard]
-    // {
     path: 'console',
     component: ConsoleComponent,
     canActivate: [AuthGuard],
@@ -37,20 +27,11 @@ const appRoutes: Routes = [
         path: '',
         children: [
           { path: '', redirectTo: '/console/dashboard', pathMatch: 'full' },
-          { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-          // { path: 'heroes', component: ManageHeroesComponent },
-          // { path: '', component: AdminDashboardComponent }
+          { path: 'dashboard', component: DashboardComponent },
         ],
       }
     ]
-  // },
   },
-  // {
-  //   path: 'crisis-center',
-  //   loadChildren: 'app/crisis-center/crisis-center.module#CrisisCenterModule'
-  // },
-  // { path: '',   redirectTo: '/heroes', pathMatch: 'full' },
-  // { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({

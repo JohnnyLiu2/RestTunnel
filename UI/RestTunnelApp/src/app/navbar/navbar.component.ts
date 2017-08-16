@@ -12,8 +12,12 @@ export class NavbarComponent implements OnInit {
   userInfo: User;
 
   constructor(private userService: UserService, private router: Router) {
-    this.userInfo = JSON.parse(localStorage['userInfo']) as User;
-    console.log(this.userInfo);
+    const info = localStorage['userInfo'];
+    if (info) {
+      this.userInfo = JSON.parse(info) as User;
+      console.log(this.userInfo);
+    }
+
 
   }
 

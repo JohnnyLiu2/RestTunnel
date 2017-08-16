@@ -28,8 +28,6 @@ export class LoginComponent implements OnInit {
   constructor(private http: HttpClient, private router: Router, private userService: UserService) {}
 
   ngOnInit() {
-
-
   }
 
   login(accessCode) {
@@ -41,12 +39,7 @@ export class LoginComponent implements OnInit {
     let data = 'username=' + encodeURIComponent(this.user) +
       '&pwd=' + encodeURIComponent(this.password);
 
-
-
-    httpPost('/api/v1/security/login', FORM_CONTENT_TYPE, data,
-    /* {headers: {'Access-Key': accessCode}}*/).then(extractJSON).then(o => {
-      // this.router.navigate(['/console/dashboard']);
-      // this.resume(o.data['access-token']);
+    httpPost('/api/v1/security/login', FORM_CONTENT_TYPE, data).then(extractJSON).then(o => {
       if (o.data['token']) {
         localStorage['authToken'] = o.data['token'];
         this.userService.userInfo = o.data['user'] as User;
@@ -54,9 +47,6 @@ export class LoginComponent implements OnInit {
         localStorage['userInfo'] = JSON.stringify(this.userService.userInfo);
 
       }
-
-
-      // window.location.href = '/console';
 
       console.log(o);
       this.router.navigate(['/console/dashboard']);
@@ -72,7 +62,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  submit(e) {
+  submit() {
 
     httpGet('/api/mtoken',
       {headers: {'Custom-Code': 'Quest', 'Content-Type': FORM_CONTENT_TYPE}}).then(extractJSON).then(o => {
@@ -84,8 +74,6 @@ export class LoginComponent implements OnInit {
       }).catch(error => {
 
       });
-    // showCommonModal();
-
   }
 
 }

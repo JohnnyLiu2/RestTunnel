@@ -151,7 +151,7 @@ var http: Function = (<any> window).fetch ?
 				}
 			}
 			if (contentType) {
-				r.setRequestHeader('Content-Type', contentType)
+				r.setRequestHeader('Content-Type', contentType);
 			}
 			let token = localStorage['authToken'];
 			if (token) {
