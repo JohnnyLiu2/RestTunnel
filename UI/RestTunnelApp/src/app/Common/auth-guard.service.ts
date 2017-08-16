@@ -18,8 +18,8 @@ export class AuthGuard implements CanActivate {
   }
 
   checkLogin(url: string): boolean {
-
-    if (localStorage['authToken'] !== 'null') {
+    const token = localStorage['authToken'];
+    if (token !== 'null' && token != null) {
       // console.log('login status' + localStorage['authToken']);
 
       return true;

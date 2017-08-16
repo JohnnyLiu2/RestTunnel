@@ -13,7 +13,6 @@ import { AppRoutingModule } from './Common/app-routing.module';
 import { ConsoleComponent } from './console/console.component';
 import { LoginRoutingModule } from './Common/login-routing.module';
 import { FormsModule }        from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { BoxChartComponent } from './dashboard/widgets/box-chart/box-chart.component';
 import { UserService } from './Common/user.service';
 import { DashboardQueryService } from './data.service.ts/dashboard-query.service';
@@ -37,7 +36,6 @@ const components: any[] = [
     AppRoutingModule,
     LoginRoutingModule,
     FormsModule,
-    HttpClientModule,
   ],
   providers: [UserService, DatePipe, DashboardQueryService],
   bootstrap: [AppComponent]

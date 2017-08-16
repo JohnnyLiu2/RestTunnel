@@ -75,7 +75,7 @@ var http: Function = (<any> window).fetch ?
     }
 
     let accessCode = localStorage['accessCode'];
-		if (token) {
+		if (accessCode) {
 			headers.set('access-key', accessCode);
     }
 

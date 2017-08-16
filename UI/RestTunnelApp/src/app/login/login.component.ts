@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { httpPost, FORM_CONTENT_TYPE } from '../common/http';
 import { HttpOptions, httpGet, extractJSON } from '../Common/http';
-import { HttpClient } from "@angular/common/http";
-import { HttpHeaders } from "@angular/common/http";
 import { Router } from '@angular/router';
 import { User, UserService } from '../Common/user.service';
 declare function showCommonModal(): any;
@@ -25,21 +23,32 @@ export class LoginComponent implements OnInit {
 		this.resume = resume;
 	}
 
-  constructor(private http: HttpClient, private router: Router, private userService: UserService) {}
+  constructor(private router: Router, private userService: UserService) {}
 
   ngOnInit() {
   }
 
-  login(accessCode) {
-    this.error = false;
-    this.message = 'Checking user and password...';
 
-    console.log("access key is "+ accessCode);
-    localStorage['accessCode'] = accessCode;
-    let data = 'username=' + encodeURIComponent(this.user) +
-      '&pwd=' + encodeURIComponent(this.password);
 
-    httpPost('/api/v1/security/login', FORM_CONTENT_TYPE, data).then(extractJSON).then(o => {
+  submit() {
+    let login = (result): Promise<any>  => {
+
+      this.accessCode = result.data['mtoken'];
+      console.log(this.accessCode);
+      // this.login(this.accessCode);
+      this.error = false;
+      this.message = 'Checking user and password...';
+
+      console.log("access key is "+ this.accessCode);
+      localStorage['accessCode'] = this.accessCode;
+      let data = 'username=' + encodeURIComponent(this.user) +
+        '&pwd=' + encodeURIComponent(this.password);
+
+      return httpPost('/api/v1/security/login', FORM_CONTENT_TYPE, data).then(extractJSON);
+    }
+
+    httpGet('/api/mtoken',
+      {headers: {'Custom-Code': 'Quest', 'Content-Type': FORM_CONTENT_TYPE}}).then(extractJSON).then(login).then(o => {
       if (o.data['token']) {
         localStorage['authToken'] = o.data['token'];
         this.userService.userInfo = o.data['user'] as User;
@@ -60,20 +69,6 @@ export class LoginComponent implements OnInit {
               response.statusText;
       Promise.resolve(tmp).then(message => this.message = message);
     });
-  }
-
-  submit() {
-
-    httpGet('/api/mtoken',
-      {headers: {'Custom-Code': 'Quest', 'Content-Type': FORM_CONTENT_TYPE}}).then(extractJSON).then(o => {
-
-        this.accessCode = o.data['mtoken'];
-        console.log(this.accessCode);
-        this.login(this.accessCode);
-
-      }).catch(error => {
-
-      });
   }
 
 }
