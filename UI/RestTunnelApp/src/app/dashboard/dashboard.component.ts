@@ -49,6 +49,7 @@ export class DashboardComponent implements OnInit {
                           'total-agents',
                           'stats-chart-box'
                         ];
+  id: any;
 
   constructor(public datepipe: DatePipe, private dataQueryService: DashboardQueryService) { }
 
@@ -69,10 +70,33 @@ export class DashboardComponent implements OnInit {
     });
 
     window.addEventListener('resize', () => {
+
       this.loadingElement.forEach(value => {
-        $('#' + value).loading('resize');
+         $('#' + value).loading('resize');
       });
+
     });
+
+    window.addEventListener('resize', () => {
+        clearTimeout(this.id);
+        this.id = setTimeout(() => {
+          this.loadingElement.forEach(value => {
+          $('#' + value).loading('resize');
+          });
+        }, 500);
+      });
+    // $(window).resize(function() {
+    //   clearTimeout(window.resizedFinished);
+    //   window.resizedFinished = setTimeout(function(){
+    //     this.loadingElement.forEach(value => {
+
+    //       $('#' + value).loading('resize');
+
+    //   });
+    // }, 250);
+    // });
+
+    // });
   }
 
   getAgents() {
