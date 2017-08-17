@@ -60,20 +60,20 @@ export class DashboardQueryService {
         )
       );
 
-      const networkId = property['network']['uniqueId'];
+      // const networkId = property['network']['uniqueId'];
 
-      this.getMetric(networkId, 'utilization').then(extractJSON).then(utilizationData =>
-        this.getMetric(networkId, 'bandwidth').then(extractJSON).then(bandwidthData => {
-          // this.getMetric(storageId, 'spaceUsed').then(extractJSON).then(spaceUsedData => {
-          if (network) {
-            network({
-              utilization: parseFloat(utilizationData.data['properties']['average']),
-              bandwidth: parseFloat(bandwidthData.data['properties']['average'])
-            });
-          }
-        })
-        // )
-      );
+      // this.getMetric(networkId, 'utilization').then(extractJSON).then(utilizationData =>
+      //   this.getMetric(networkId, 'bandwidth').then(extractJSON).then(bandwidthData => {
+
+      //     if (network) {
+      //       network({
+      //         utilization: parseFloat(utilizationData.data['properties']['average']),
+      //         bandwidth: parseFloat(bandwidthData.data['properties']['average'])
+      //       });
+      //     }
+      //   })
+
+      // );
 
 
     }).catch(error => {

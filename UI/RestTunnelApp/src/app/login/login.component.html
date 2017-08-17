@@ -11,6 +11,12 @@
                 <form class="form-horizontal" (ngSubmit)="submit()">
                     <fieldset>
 
+                        <div class="input-prepend" title="Custom Code">
+                            <span class="add-on"><i class="halflings-icon tag"></i></span>
+                            <input #customCodeField class="input-large span10" name="custom-code" id="custom-code" (input)="customCode = customCodeField.value" type="text" placeholder="type custom code" value="{{ this.customCode}}" />
+                        </div>
+                        <div class="clearfix"></div>
+
                         <div class="input-prepend" title="Username">
                             <span class="add-on"><i class="halflings-icon user"></i></span>
                             <input #userField class="input-large span10" name="username" id="username" (input)="user = userField.value" type="text" placeholder="type username" />
@@ -21,7 +27,7 @@
                             <span class="add-on"><i class="halflings-icon lock"></i></span>
                             <input #passwordField class="input-large span10" name="password" id="password" type="password" (input)="password = passwordField.value" placeholder="type password" />
                         </div>
-                        <label class="remember" *ngIf="message">{{message}}</label>
+                        <!-- <label class="remember" *ngIf="message">{{message}}</label> -->
                         <div class="clearfix"></div>
 
 

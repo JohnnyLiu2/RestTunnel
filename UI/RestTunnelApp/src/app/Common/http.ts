@@ -1,3 +1,4 @@
+import { ResponseModel } from '../models/response.model';
 export const FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded; charset=utf-8';
 const HOST_URL = 'http://mfoglight.azurewebsites.net';
 // const HOST_URL = 'http://10.30.154.102:8080';
@@ -46,6 +47,10 @@ export function extractJSON(response: Response): Promise<any> {
 	return status === 200 ? response.json() :
 			Promise.reject(new HttpError('Unexpected status: ' + status + ' ' +
 					response.statusText, response));
+}
+
+export function extractResponseModel(json: any): Promise<ResponseModel<any>> {
+  return json as Promise<ResponseModel<any>>;
 }
 
 var pending: Array<any>;
