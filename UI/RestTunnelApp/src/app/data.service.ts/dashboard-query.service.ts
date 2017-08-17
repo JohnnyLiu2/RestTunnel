@@ -11,7 +11,7 @@ export class DashboardQueryService {
 
   getCurrentHostMonitorInfo(memory: any, cpus: any, storage: any, network: any, failed: any) {
     httpPost('/api/v1/topology/query', 'application/json', '{"queryText": "!Host"}').then(extractJSON).then(o => {
-      console.log(o);
+      // console.log(o);
       const property = o.data[0]['properties'];
       const memoryId = property['memory']['uniqueId'];
 

@@ -230,11 +230,11 @@ export class DashboardComponent implements OnInit {
 
       let bigChartData = [];
       let axisData = [];
-      console.log(lastHours.join(','));
+      // console.log(lastHours.join(','));
 
       lastHours.forEach((item, index) => {
         const tempList = [index, displayData[index]];
-        console.log(item.substr(8, 2) + '-' + displayData[index]);
+        // console.log(item.substr(8, 2) + '-' + displayData[index]);
 
         bigChartData.push(tempList);
         axisData.push([index, item.substr(8, 2)]);
@@ -242,7 +242,7 @@ export class DashboardComponent implements OnInit {
 
       });
 
-      console.log(axisData);
+      // console.log(axisData);
 
       setTimeout(() => {
         sparkline_charts();

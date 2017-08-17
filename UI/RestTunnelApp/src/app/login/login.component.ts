@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { httpPost, FORM_CONTENT_TYPE } from '../common/http';
-import { HttpOptions, httpGet, extractJSON, extractResponseModel } from '../Common/http';
+// import { } from '../common/http';
+import { HttpOptions, httpGet, extractJSON, extractResponseModel, httpPost, FORM_CONTENT_TYPE } from '../Common/http';
 import { Router } from '@angular/router';
 import { User, UserService } from '../Common/user.service';
 import $ from 'jquery';
 import 'jquery-easy-loading';
-import { loading } from 'jquery-easy-loading';
+// import { loading } from 'jquery-easy-loading';
 
 declare function showCommonModal(): any;
 
@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
     .then(login)
     .then(extractResponseModel)
     .then(o => {
-      console.log(o.status);
+      // console.log(o.status);
 
       if (o.data) {
         if (this.customCode) {
@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit {
 
       }
 
-      console.log(o);
+      // console.log(o);
       this.router.navigate(['/console/dashboard']);
       $('form').loading('stop');
     }).catch(error => {
