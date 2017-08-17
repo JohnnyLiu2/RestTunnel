@@ -27,9 +27,9 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     localStorage['userInfo'] = null;
-      localStorage['authToken'] = null;
-      localStorage['accessCode'] = null;
-      this.userService.userInfo = null;
+    localStorage['authToken'] = null;
+    localStorage['accessCode'] = null;
+    this.userService.userInfo = null;
     const navigateToLogin = () => { this.router.navigate(['/login']); };
     httpGet('/api/v1/security/logout').then(extractJSON).then(o => {
       navigateToLogin();
