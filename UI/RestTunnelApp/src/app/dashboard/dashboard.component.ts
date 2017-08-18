@@ -50,6 +50,7 @@ export class DashboardComponent implements OnInit {
                           'stats-chart-box'
                         ];
   id: any;
+  cpusUnit = 'Hz';
 
   constructor(public datepipe: DatePipe, private dataQueryService: DashboardQueryService) { }
 
@@ -85,18 +86,6 @@ export class DashboardComponent implements OnInit {
           });
         }, 500);
       });
-    // $(window).resize(function() {
-    //   clearTimeout(window.resizedFinished);
-    //   window.resizedFinished = setTimeout(function(){
-    //     this.loadingElement.forEach(value => {
-
-    //       $('#' + value).loading('resize');
-
-    //   });
-    // }, 250);
-    // });
-
-    // });
   }
 
   getAgents() {
@@ -148,7 +137,19 @@ export class DashboardComponent implements OnInit {
       }, 0.1);
     }, cpus => {
       this.cpusUtilization = cpus.utilization;
-      this.cpusTotal = cpus.total / 1000.0;
+      // this.cpusTotal = cpus.total / 1000.0;
+      if (cpus.total > 1000) {
+        this.cpusTotal = cpus.total / 1000.0;
+        this.cpusUnit = 'KHz';
+        if (this.cpusTotal > 1000) {
+          this.cpusTotal /= 1000.0;
+          this.cpusUnit = 'MHz';
+          if (this.cpusTotal > 1000) {
+          this.cpusTotal /= 1000.0;
+          this.cpusUnit = 'GHz';
+        }
+        }
+      }
       setTimeout( () => {
         circle_progess('cpus');
         $('#cpus_circleStatsItemBox').loading('stop');
@@ -251,16 +252,6 @@ export class DashboardComponent implements OnInit {
         $('#stats-chart-box').loading('stop');
         $('#alarm-count').loading('stop');
       }, 0.1);
-
-    }).catch(error => {
-
-    });
-
-  }
-
-  query() {
-    httpPost('/api/v1/topology/query', 'application/json', '{"queryText": "!Host"}').then(extractJSON).then(o => {
-      console.log(o);
 
     }).catch(error => {
 

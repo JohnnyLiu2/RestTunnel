@@ -53,14 +53,14 @@ export function extractResponseModel(json: any): Promise<ResponseModel<any>> {
   return json as Promise<ResponseModel<any>>;
 }
 
-var pending: Array<any>;
+let pending: Array<any>;
 
 declare function fetch(url: string, options: any): Promise<Response>;
 declare class Headers {
   set(name: string, value: string): void;
 }
 
-var http: Function = (<any> window).fetch ?
+let http: Function = (<any> window).fetch ?
   function(method: string, url: string, options?: HttpOptions, contentType?: string, body?: any): Promise<Response> {
     let headers = new Headers();
 

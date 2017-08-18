@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { httpPost, extractJSON, httpGet, Response } from '../Common/http';
+import { httpPost, extractJSON, httpGet, Response, extractResponseModel } from '../Common/http';
 import { MemoryInfoModel } from '../models/memory-info.model';
 
 @Injectable()
@@ -9,10 +9,8 @@ export class DashboardQueryService {
     return httpGet('/api/v1/topology/' + uniqueId + '/' + metricName + '/current');
   }
 
-  getCurrentHostMonitorInfo(memory: any, cpus: any, storage: any, network: any, failed: any) {
-    httpPost('/api/v1/topology/query', 'application/json', '{"queryText": "!Host"}').then(extractJSON).then(o => {
-      // console.log(o);
-      const property = o.data[0]['properties'];
+  private getAvailableHostData(memory: any, cpus: any, storage: any, network: any, failed: any, o: any) {
+      const property = o['properties'];
       const memoryId = property['memory']['uniqueId'];
 
 
@@ -59,22 +57,42 @@ export class DashboardQueryService {
           })
         )
       );
+  }
 
-      // const networkId = property['network']['uniqueId'];
+  tryNextItem(memory: any, cpus: any, storage: any, network: any, failed: any, o: any, index: number) {
+    if (index >= o.length) {
+      return;
+    }
 
-      // this.getMetric(networkId, 'utilization').then(extractJSON).then(utilizationData =>
-      //   this.getMetric(networkId, 'bandwidth').then(extractJSON).then(bandwidthData => {
+    let element = o[index];
 
-      //     if (network) {
-      //       network({
-      //         utilization: parseFloat(utilizationData.data['properties']['average']),
-      //         bandwidth: parseFloat(bandwidthData.data['properties']['average'])
-      //       });
-      //     }
-      //   })
+    if (element['properties']['cpus'] != null) {
+          const cpusId = element['properties']['cpus']['uniqueId'];
+        console.log(cpusId);
 
-      // );
+        this.getMetric(cpusId, 'totalHz').then(extractJSON).then(totalHzData => {
+          if (typeof totalHzData.data !== 'string') {
+            this.getAvailableHostData(memory, cpus, storage, network, failed, element);
+            // shouldStopFor = true;
+            console.log(totalHzData.data);
+          }else {
+            this.tryNextItem(memory, cpus, storage, network, failed, o, index + 1);
+          }
+        });
 
+    }else {
+      this.tryNextItem(memory, cpus, storage, network, failed, o, index + 1);
+    }
+  }
+
+  getCurrentHostMonitorInfo(memory: any, cpus: any, storage: any, network: any, failed: any) {
+
+    httpPost('/api/v1/topology/query', 'application/json', '{"queryText": "!Host"}').then(extractJSON)
+    .then(extractResponseModel)
+    .then(o => {
+      console.log('Data length: ' + o.data.length);
+
+      this.tryNextItem(memory, cpus, storage, network, failed, o.data, 0);
 
     }).catch(error => {
       failed(error);

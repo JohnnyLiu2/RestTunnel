@@ -757,18 +757,18 @@ function circle_progess(elementId) {
     endValue = value * percent;
 
     circleStatsItemBox.find(".count > .unit").html(unit);
-    circleStatsItemBox.find(".count > .number").countTo({
+    // circleStatsItemBox.find(".count > .number").countTo({
 
-        from: 0,
-        to: endValue,
-        speed: countSpeed,
-        refreshInterval: 50
+    //     from: 0,
+    //     to: endValue,
+    //     speed: countSpeed,
+    //     refreshInterval: 50
 
-        // });
+    //     // });
 
-        //$(this).find(".count").html(value*percent + unit);
+    //     //$(this).find(".count").html(value*percent + unit);
 
-    });
+    // });
 
 }
 
@@ -1260,6 +1260,7 @@ function charts(alamsData, axisData) {
                     }, */
             {
                 data: alamsData,
+                label: "Alarms",
                 bars: {
                     show: true,
                     fill: false,
@@ -1277,7 +1278,7 @@ function charts(alamsData, axisData) {
                 borderWidth: 0
             },
             legend: {
-                show: false
+                show: true
             },
             colors: ["rgba(255,255,255,0.8)", "rgba(255,255,255,0.6)", "rgba(255,255,255,0.4)", "rgba(255,255,255,0.2)"],
             xaxis: { ticks: axisData, tickDecimals: 0, color: "rgba(255,255,255,0.8)" },
