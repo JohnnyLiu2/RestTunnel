@@ -11,12 +11,17 @@ import {
 import { AuthGuard } from './auth-guard.service';
 import { ConsoleComponent } from '../console/console.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
+import { QrAuthComponent } from '../qr-auth/qr-auth.component';
 
 const appRoutes: Routes = [
    {
     path: '',
     redirectTo: '/console/dashboard',
     pathMatch: 'full',
+  },
+  {
+    path: 'qr-auth',
+    component: QrAuthComponent,
   },
   {
     path: 'console',

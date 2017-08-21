@@ -16,6 +16,7 @@ import { FormsModule }        from '@angular/forms';
 import { BoxChartComponent } from './dashboard/widgets/box-chart/box-chart.component';
 import { UserService } from './Common/user.service';
 import { DashboardQueryService } from './data.service.ts/dashboard-query.service';
+import { QrAuthComponent } from './qr-auth/qr-auth.component';
 
 
 const components: any[] = [
@@ -27,6 +28,7 @@ const components: any[] = [
   FooterComponent,
   ConsoleComponent,
   BoxChartComponent,
+  QrAuthComponent,
 ];
 
 @NgModule({
