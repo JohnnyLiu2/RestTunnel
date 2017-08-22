@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService, User } from '../Common/user.service';
 import { Router } from '@angular/router';
-import { httpGet, extractJSON } from '../Common/http';
+import { httpGet, extractJSON, extractResponseModel } from '../Common/http';
 
 @Component({
   selector: 'app-navbar',
@@ -11,19 +11,30 @@ import { httpGet, extractJSON } from '../Common/http';
 export class NavbarComponent implements OnInit {
   userInfo: User;
 
-  constructor(private userService: UserService, private router: Router) {
-    const info = localStorage['userInfo'];
-    if (info) {
-      this.userInfo = JSON.parse(info) as User;
-      console.log(this.userInfo);
-    }
+  constructor(private userService: UserService, private router: Router) {}
 
-
+  getCurrentUserInfo(userInfoCallback: (userInfo: User) => void) {
+    httpGet('/api/v1/user/current').then(extractJSON).then(extractResponseModel).then(o => {
+      let userInfo = o.data as User;
+      if (userInfoCallback) {
+        userInfoCallback(userInfo);
+      }
+    });
   }
 
   ngOnInit() {
-
+    // const info = localStorage['userInfo'];
+    // if (info) {
+    //   this.userInfo = JSON.parse(info) as User;
+    //   console.log(this.userInfo);
+    // }else {
+      this.getCurrentUserInfo(o => {
+        this.userInfo = o;
+      });
+    // }
   }
+
+
 
   logout() {
     localStorage['userInfo'] = null;

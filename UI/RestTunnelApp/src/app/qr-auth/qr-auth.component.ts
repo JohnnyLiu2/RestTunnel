@@ -11,17 +11,23 @@ export class QrAuthComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe((params: Params) => {
-        let accessKey = params['access-key'];
-        let authToken = params['auth-token'];
+    this.activatedRoute.queryParams.subscribe((params: Params) => {
+        let accessKey = params['key'];
+        let authToken = params['token'];
+        // console.log("store", params);
+        // console.info(params);
+        console.log(accessKey);
+        console.log(authToken);
         if (accessKey != null && authToken != null) {
-          localStorage['accessCode'] = accessKey;
-          localStorage['authToken'] = authToken;
-          console.log(accessKey);
-          console.log(authToken);
+
+          localStorage['accessCode'] = decodeURIComponent(accessKey);
+          localStorage['authToken'] = decodeURIComponent(authToken);
+          console.info(localStorage['accessCode']);
+          console.info(localStorage['authToken']);
           this.router.navigate(['/console/dashboard']);
         }else {
           this.router.navigate(['/login']);
+          // console.info(localStorage['accessCode']);
         }
 
       });
