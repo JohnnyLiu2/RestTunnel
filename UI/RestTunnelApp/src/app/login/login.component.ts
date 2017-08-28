@@ -24,11 +24,8 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router, private userService: UserService) {}
 
   ngOnInit() {
-
     window.addEventListener('resize', () => {
-
       $('form').loading('resize');
-
     });
   }
 
@@ -38,9 +35,7 @@ export class LoginComponent implements OnInit {
 
   submit() {
     $('form').loading('start');
-
     console.log(this.accessKey);
-
 
     localStorage['authToken'] = null;
     localStorage['accessCode'] = this.accessKey;
@@ -69,44 +64,6 @@ export class LoginComponent implements OnInit {
         $('form').loading('stop');
       });
     });
-
-    // httpGet('/api/mtoken',
-    //   {headers: {'Custom-Code': this.customCode, 'Content-Type': FORM_CONTENT_TYPE}})
-    // .then(extractJSON)
-    // .then(login)
-    // .then(extractResponseModel)
-    // .then(o => {
-    //   // console.log(o.status);
-
-    //   if (o.data) {
-    //     // if (this.customCode) {
-    //     //   localStorage['custom-code'] = this.customCode;
-    //     //   console.log(localStorage['custom-code']);
-
-    //     // }
-    //     this.message = 'Login pass...';
-    //     localStorage['authToken'] = o.data['token'];
-    //     this.userService.userInfo = o.data['user'] as User;
-    //     console.log(this.userService.userInfo);
-    //     localStorage['userInfo'] = JSON.stringify(this.userService.userInfo);
-
-    //   }
-
-    //   // console.log(o);
-    //   this.router.navigate(['/console/dashboard']);
-    //   $('form').loading('stop');
-    // }).catch(error => {
-    //   this.error = true;
-    //   let response = error.response;
-    //   let tmp = !response ? error.message :
-    //       response.headers.get('Content-Type').indexOf('application/json') === 0 ?
-    //           response.json().then((o: any) => o.error) :
-    //           response.statusText;
-    //   Promise.resolve(tmp).then(message => {
-    //     this.message = message;
-    //     $('form').loading('stop');
-    //   });
-    // });
   }
 
 }

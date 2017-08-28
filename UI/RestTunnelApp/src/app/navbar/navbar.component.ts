@@ -23,21 +23,15 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    // const info = localStorage['userInfo'];
-    // if (info) {
-    //   this.userInfo = JSON.parse(info) as User;
-    //   console.log(this.userInfo);
-    // }else {
-      this.getCurrentUserInfo(o => {
-        this.userInfo = o;
-      });
-    // }
+
+    this.getCurrentUserInfo(o => {
+      this.userInfo = o;
+    });
+
   }
 
-
-
   logout() {
-    localStorage['userInfo'] = null;
+
     localStorage['authToken'] = null;
     localStorage['accessCode'] = null;
     this.userService.userInfo = null;
@@ -47,8 +41,6 @@ export class NavbarComponent implements OnInit {
     }).catch(error => {
       navigateToLogin();
     });
-
-
   }
 
 }
