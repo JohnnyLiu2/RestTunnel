@@ -8,8 +8,10 @@ Run below command in Terminal.
 
 ```bash
 npm install -g @angular/cli
+npm install
 ```
 
+*Note: latest stable NodeJS is needed.*
 
 ## Development server
 
@@ -17,7 +19,9 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 ## Login
 
-Input `Quest` as custom code in login page.
+Input `Access Key` and `Token` in login page.
+
+Or scan QR code to login in mobile device.
 
 ## Code scaffolding
 
